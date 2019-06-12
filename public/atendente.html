@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LIVE IN</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+</head>
+<body>
+    
+    <form id="atendente-escolhe">
+        <input id="ginche" type="text" name="ondeIr" placeholder="Ginche"/>
+        <button type="submit">ATENDER</button>
+    </form> 
+
+    <div id="atende" style="width: 300px; height: 600px; border:1px solid black;float: left;position: absolute;"></div>
+    <div id="atendido" style="width: 300px; height: 600px; border:1px solid rgb(255, 0, 0);float: right;position: absolute;margin-left: 350px;"></div>
+
+    <script type="text/javascript">
+        var socket = io('http://localhost:3000/');
+        var codigoSelecionado;
+        var clientesList = [];
+
+        socket.on('lastHistoricData', (listCode)=>{
+            for(code of listCode){
+                renderClient(code);
+            }
+            
+            socket.on('lastHistoricDataSelect', (listUsers)=>{
+                for(data of listUsers){
+                    renderPanel(data);
+                }
+             });
+        });
+
+        
+
+        socket.on('receivedCode', (code)=>{
+            renderClient(code);     
+        });
+
+        socket.on('receivedUser', (user)=>{
+            renderPanel(user);
+        });
+
+        function renderClient(code){
+            $('#atende').append('<strong id="codigoAppend">'+code.lastNumber+'</strong> <button onClick="pegaCodigoEscolhido('+code.lastNumber+')">PEGA</button><br>');
+        }
+
+        function renderPanel(obj){
+            $('#atendido').append('<strong id="codigoAtendido"> GUICHÊ : '+obj.where+'</strong> CLIENTE : '+obj.userSelect+'<br><hr/>');
+        }
+
+        function pegaCodigoEscolhido(codigo){
+            codigoSelecionado = codigo;
+            alert('Usuário selecionado'+ codigoSelecionado);
+        }
+
+        $('#atendente-escolhe').submit((event)=>{
+            event.preventDefault();
+            var cliente = codigoSelecionado;
+            var ginche = $('input[name=ondeIr]').val();
+
+            var sendObjectUser = {
+                userSelect: cliente,
+                where: ginche,
+                user: 'atendente'
+            };
+            if(ginche.length){
+                renderPanel(sendObjectUser);
+                socket.emit('receivedUser', sendObjectUser);
+            }else alert('Insira seu GINCHE');
+        });
+
+    </script>
+</body>
+</html>
