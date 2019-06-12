@@ -28,20 +28,16 @@
             for(code of listCode){
                 renderClient(code);
             }
-            
-            socket.on('lastHistoricDataSelect', (listUsers)=>{
+        });
+        socket.on('lastHistoricDataSelect', (listUsers)=>{
                 for(data of listUsers){
                     renderPanel(data);
                 }
-             });
         });
-
-        
-
         socket.on('receivedCode', (code)=>{
             renderClient(code);     
         });
-
+        
         socket.on('receivedUser', (user)=>{
             renderPanel(user);
         });
@@ -71,7 +67,8 @@
             };
             if(ginche.length){
                 renderPanel(sendObjectUser);
-                socket.emit('receivedUser', sendObjectUser);
+                console.log('Enviado para o server-side : ' + sendObjectUser);
+                socket.emit('sendUser', sendObjectUser);            
             }else alert('Insira seu GINCHE');
         });
 

@@ -29,16 +29,16 @@ io.on('connection', socket =>{
 
     socket.on('sendRedirect', dataCode =>{
         orderByClient.push(dataCode);
-        console.log('Enviado para Client-side : ' + dataCode);
+        console.log('Enviado para Client-side : ' + dataCode.lastNumber);
         socket.broadcast.emit('receivedCode',dataCode);
     });
 
     socket.on('sendUser', dataUser =>{
         orderBySelect.push(dataUser);
-        console.log('Enviado para Client-side Atendente: ' + dataUser);
+        console.log('Enviado para Client-side Atendente: ' + dataUser.userSelect);
         socket.broadcast.emit('receivedUser', dataUser);
     });
-    
+
 });
 
 server.listen(3000);
