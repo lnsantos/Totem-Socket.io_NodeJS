@@ -11,6 +11,9 @@ app.set('views',path.join(__dirname, 'public'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine','html');
 
+app.use('/atividade',(req, res)=>{
+    res.render('painel.html');
+});
 app.use('/atendente',(req, res)=>{
     res.render('atendente.html');
 });

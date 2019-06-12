@@ -10,12 +10,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 </head>
 <body>
-    <h1 id="proximo"></h1>
+    <div id="root"></div>
 
     <script type="text/javascript">
-         var socket = io('http://localhost:3000/');
+        var socket = io('http://localhost:3000/');
 
-         
+        socket.on('receivedUser', (user)=>{
+            renderNext(user);
+        });
+        function renderNext(next){
+            var root = $('#root').val();
+            if(root.lenght > 2){
+                root.val('');
+            }else $('#root').html('<h1> PROXIMO : '+next.userSelect+'</h1><br><h3> GUINCHÊ '+next.where+'</h3>');
+        }
     </script>
 
 </body>
