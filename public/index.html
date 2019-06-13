@@ -23,10 +23,9 @@
 
             var janela = window.open();
 
-            janela.document.write("<body style='width:100%'><h1 style='font-size:100%'>Texto em negrito</h1><h2 style='width:100%'>Conteúdo em html</h2></body>"); 
+            janela.document.write("<body style='width:100%'><h1 style='font-size:150px;text-align:center; font-weight:bold'>SEU CÓDIGO :</h1><h2 style='font-size:100px;text-align:center;'>"+codigo+"</h2></body>"); 
             janela.print();
             janela.close();
-           // document.body.innerHTML = oldPage;
         }
 
         $('#nova-ficha').submit((event)=>{
@@ -40,8 +39,7 @@
             };
             console.log(sendObject.lastNumber + ' Enviado para o servidor!');
             socket.emit('sendRedirect', sendObject);
-            window.document.write("<b>Código : </b>"+code); 
-            window.print(); 
+            impressao(code);
         });
 
 

@@ -65,8 +65,7 @@
 
         function pegaCodigoEscolhido(codigo){
             codigoSelecionado = codigo;
-
-            
+ 
             $('#usuarioSelecionadoDoPainel').text(codigoSelecionado);
 
             var removeEscolhido = {
@@ -77,10 +76,6 @@
             var arrayPendenteAtual =  $('#atende').text();
             var sendArray = arrayPendenteAtual.replace(' PEGA',",");
             console.log(sendArray);
-
-            /// alert();
-            /// alert(valorDiv);
-            // alert(sendArray);
 
             socket.emit('removeSelecionado', removeEscolhido);  
         }
@@ -93,7 +88,7 @@
          
             alert(codigoSelecionado);
             alert(relatorio);
-            
+
             var obj = {
                 string : relatorio,
                 codigoProceso: codigoSelecionado
