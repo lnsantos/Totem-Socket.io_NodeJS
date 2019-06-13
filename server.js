@@ -36,6 +36,11 @@ io.on('connection', socket =>{
         socket.broadcast.emit('receivedCode',dataCode);
     });
 
+    socket.on('removeSelecionado', dataSelecionado=>{
+        console.log('Enviado para Client-side Atendente: ');
+        socket.broadcast.emit('removeUser', dataSelecionado);
+    });
+
     socket.on('sendUser', dataUser =>{
         orderBySelect.push(dataUser);
         console.log('Enviado para Client-side Atendente: ' + dataUser.userSelect);

@@ -18,11 +18,21 @@
 
     <div id="atende" style="width: 300px; height: 600px; border:1px solid black;float: left;position: absolute;"></div>
     <div id="atendido" style="width: 300px; height: 600px; border:1px solid rgb(255, 0, 0);float: right;position: absolute;margin-left: 350px;"></div>
-
+    <div id="usuario-selecionado" style="width: 400px; height: 600px; border:1px solid rgb(76, 0, 255);float: right;position: absolute;margin-left: 700px;"> 
+        <h1 id="usuarioSelecionadoDoPainel" style="text-align: center">RELATÓRIO</h1>
+        <textarea rows="30" cols="54" style="margin:0 auto;" name="relatorio"></textarea>
+        <button type="submit" >GERAR RELATÓRIO</button>
+    </div>
     <script type="text/javascript">
         var socket = io('http://localhost:3000/');
         var codigoSelecionado;
         var clientesList = [];
+
+        socket.on('removeUser', (data)=>{
+            data.codigo();
+            data.btn();
+            alert('Atualização...');
+        });
 
         socket.on('lastHistoricData', (listCode)=>{
             for(code of listCode){
@@ -39,27 +49,44 @@
         });
         
         socket.on('receivedUser', (user)=>{
-            renderPanel(user);
+            renderPanel(user); 
         });
 
         function renderClient(code){
-            $('#atende').append('<strong id="codigoAppend">'+code.lastNumber+'</strong> <button onClick="pegaCodigoEscolhido('+code.lastNumber+')">PEGA</button><br>');
+            $('#atende').append('<strong id="codigoAppend">'+code.lastNumber+'</strong> <button id="btn_pega_usuario" onClick="pegaCodigoEscolhido('+code.lastNumber+')">PEGA</button><br>');
         }
 
         function renderPanel(obj){
             $('#atendido').append('<strong id="codigoAtendido"> GUICHÊ : '+obj.where+'</strong> CLIENTE : '+obj.userSelect+'<br><hr/>');
+            
         }
 
         function pegaCodigoEscolhido(codigo){
             codigoSelecionado = codigo;
-            alert('Usuário selecionado'+ codigoSelecionado);
+
+            
+            $('#usuarioSelecionadoDoPainel').text(codigoSelecionado);
+
+            var removeEscolhido = {
+                codigo : $('#codigoAppend').remove(),
+                btn : $('#btn_pega_usuario').remove()
+            };
+
+            var arrayPendenteAtual =  $('#atende').text();
+            var sendArray = arrayPendenteAtual.replace(' PEGA',",");
+            console.log(sendArray);
+
+            /// alert();
+            /// alert(valorDiv);
+            // alert(sendArray);
+
+            socket.emit('removeSelecionado', removeEscolhido);  
         }
 
         $('#atendente-escolhe').submit((event)=>{
             event.preventDefault();
             var cliente = codigoSelecionado;
             var ginche = $('input[name=ondeIr]').val();
-
             var sendObjectUser = {
                 userSelect: cliente,
                 where: ginche,
@@ -71,7 +98,6 @@
                 socket.emit('sendUser', sendObjectUser);            
             }else alert('Insira seu GINCHE');
         });
-
     </script>
 </body>
 </html>
