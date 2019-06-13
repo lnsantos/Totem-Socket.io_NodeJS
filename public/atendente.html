@@ -19,9 +19,11 @@
     <div id="atende" style="width: 300px; height: 600px; border:1px solid black;float: left;position: absolute;"></div>
     <div id="atendido" style="width: 300px; height: 600px; border:1px solid rgb(255, 0, 0);float: right;position: absolute;margin-left: 350px;"></div>
     <div id="usuario-selecionado" style="width: 400px; height: 600px; border:1px solid rgb(76, 0, 255);float: right;position: absolute;margin-left: 700px;"> 
-        <h1 id="usuarioSelecionadoDoPainel" style="text-align: center">RELATÓRIO</h1>
-        <textarea rows="30" cols="54" style="margin:0 auto;" name="relatorio"></textarea>
-        <button type="submit" >GERAR RELATÓRIO</button>
+       <form id="relatorio-usuario">
+            <h1 id="usuarioSelecionadoDoPainel" style="text-align: center">RELATÓRIO</h1>
+            <textarea id="relatorioOficial" rows="30" cols="54" style="margin:0 auto;" name="relatorio"></textarea>
+            <button type="submit" >GERAR RELATÓRIO</button>
+        </form>
     </div>
     <script type="text/javascript">
         var socket = io('http://localhost:3000/');
@@ -82,6 +84,31 @@
 
             socket.emit('removeSelecionado', removeEscolhido);  
         }
+
+        $('#relatorio-usuario').submit((event)=>{
+            event.preventDefault();
+            alert('Processando relatório...');
+            var relatorio = $('#relatorioOficial').val();
+            var codigo = $('#usuarioSelecionadoDoPainel').val();
+         
+            alert(codigoSelecionado);
+            alert(relatorio);
+            var obj = {
+                    string :relatorio,
+                    codigoProceso:codigoSelecionado
+            };
+
+            alert('OBJ Criado com sucesso');
+            if(relatorio.length){
+                $('#usuarioSelecionadoDoPainel').text('RELATÓRIO');
+                $('input[name=relatorio]').text('');
+
+                socket.emit('relatorioAtendido', obj);
+                alert('Relatório enviado com sucesso...');
+            }else{
+                alert('relatorio.length');
+            }
+        });
 
         $('#atendente-escolhe').submit((event)=>{
             event.preventDefault();
