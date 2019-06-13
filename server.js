@@ -33,6 +33,7 @@ io.on('connection', socket =>{
 
     socket.on('relatorioAtendido', data=>{
         console.log(data);
+        console.log(`${data.codigoProceso} Atualizado com sucesso! ( Relatório atualizado )`);
         fs.appendFile(`atividades/${data.codigoProceso}.txt`, `\n -- RELATÓRIO :  ${data.string} \n`, function (err) {
             if (err) throw err;
             console.log(`${data.codigoProceso} Atualizado com sucesso! ( Relatório atualizado )`);
